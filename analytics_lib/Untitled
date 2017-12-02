@@ -1,0 +1,18 @@
+for i,fea in enumerate(list(fea_name_import_sort['name'])):
+    if i < 10:
+        temp = feature_df_subset_clean[[fea,'has_stay']]      
+        h1, bins = np.histogram(temp.iloc[:,0][temp.has_stay == True],15, normed=False)
+        h2, bins = np.histogram(temp.iloc[:,0][temp.has_stay == False],15, normed=False)
+        ax1 = plt.subplot() 
+        ax1.hist((temp.iloc[:,0][temp.has_stay == True],temp.iloc[:,0][temp.has_stay == False]),10,normed=False)
+        ax1.set_title(str(fea))
+        ax1.legend(['booked','not booked'])
+        h = h1.astype(float)/(h2+h1).astype(float)
+        h[np.isnan(h)]=0
+        ax2 = ax1.twinx()
+        ax2.plot(bins[0:-1],h, 'r--', linewidth=1)
+        fig.tight_layout()
+        print 'saving ' + fea
+        plt.savefig(os.path.join(data_dir,'Figures/',fea+'.png'))
+        plt.show()
+        plt.close()  
